@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sériescope</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="" ></script>
+</head>
+
+<body class="min-h-screen bg-[#111111] text-white">
+
+    <!-- Navbar -->
+    <header class="bg-[#090909] px-4 py-3">
+        <nav class="mx-auto flex max-w-7xl items-center gap-2">
+            <div class="flex h-7 w-7 items-center justify-center rounded-md bg-white text-black">
+                <span class="text-sm">▣</span>
+            </div>
+
+            <h1 class="text-sm font-bold">Sériescope</h1>
+        </nav>
+    </header>
+
+
+    <main class="mx-auto max-w-7xl space-y-5 px-4 py-5">
+
+        <!-- Introduction -->
+        <section>
+            <h2 class="text-xl font-bold sm:text-2xl">
+                Explore les séries TV
+            </h2>
+
+            <p class="mt-1 text-xs text-gray-400">
+                Retrouve tes séries préférées et enrichis le catalogue.
+            </p>
+        </section>
+
+
+        <!-- Add Series Form -->
+        <section class="rounded-xl border border-[#333333] bg-[#191919] p-3 sm:p-4">
+
+            <div class="mb-3">
+                <h3 class="text-sm font-bold">Ajouter une série</h3>
+
+                <p class="text-xs text-gray-400">
+                    Les champs marqués d'un * sont obligatoires.
+                </p>
+            </div>
+
+            <form class="space-y-3">
+
+                <!-- Inputs -->
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+
+                    <div>
+                        <label for="name" class="mb-1 block text-xs font-medium">
+                            Nom de la série *
+                        </label>
+
+                        <input type="text" id="name" placeholder="Ex. The Bear" required
+                            class="w-full rounded-md border border-[#333333] bg-[#111111] px-2 py-2 text-xs outline-none transition focus:border-gray-500">
+                    </div>
+
+                    <div>
+                        <label for="genre" class="mb-1 block text-xs font-medium">
+                            Genre(s) *
+                            <span class="font-normal text-gray-400">
+                                séparés par des virgules
+                            </span>
+                        </label>
+
+                        <input type="text" id="genre" placeholder="Ex. Drame, Comédie" required
+                            class="w-full rounded-md border border-[#333333] bg-[#111111] px-2 py-2 text-xs outline-none transition focus:border-gray-500">
+                    </div>
+
+                </div>
+
+
+                <!-- Description -->
+                <div>
+                    <label for="description" class="mb-1 block text-xs font-medium">
+                        Description
+                        <span class="font-normal text-gray-400">facultative</span>
+                    </label>
+
+                    <textarea id="description" rows="3" placeholder="Résume la série en quelques mots..."
+                        class="w-full resize-none rounded-md border border-[#333333] bg-[#111111] px-2 py-2 text-xs outline-none transition focus:border-gray-500"></textarea>
+                </div>
+
+
+                <!-- Submit -->
+                <button type="submit"
+                    class="rounded-md bg-white px-3 py-2 text-xs font-semibold text-black transition hover:bg-gray-300">
+                    + Ajouter la série
+                </button>
+
+            </form>
+        </section>
+
+
+        <!-- Series Catalogue -->
+        <section>
+
+            <div class="mb-3">
+                <h3 class="text-sm font-bold">Catalogue des séries</h3>
+
+                <p class="mt-1 text-xs text-gray-400">
+                    Recherche par nom ou explore un genre.
+                </p>
+            </div>
+
+
+            <!-- Search and Filter -->
+            <div
+                class="grid grid-cols-1 gap-2 rounded-xl border border-[#333333] bg-[#191919] p-2 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_auto]">
+
+                <div>
+                    <label for="search" class="mb-1 block text-xs">
+                        Recherche
+                    </label>
+
+                    <input type="search" id="search" placeholder="Ex. Breaking Bad"
+                        class="w-full rounded-md border border-[#333333] bg-[#111111] px-2 py-2 text-xs outline-none focus:border-gray-500">
+                </div>
+
+
+                <div>
+                    <label for="filter" class="mb-1 block text-xs">
+                        Genre
+                    </label>
+
+                    <select id="filter"
+                        class="w-full rounded-md border border-[#333333] bg-[#111111] px-2 py-2 text-xs text-gray-300 outline-none focus:border-gray-500">
+                        <option value="">Tous les genres</option>
+                        <option>Drame</option>
+                        <option>Comédie</option>
+                        <option>Policier</option>
+                        <option>Science-fiction</option>
+                        <option>Fantastique</option>
+                        <option>Mystère</option>
+                    </select>
+                </div>
+
+
+                <div class="flex items-end">
+                    <button type="reset"
+                        class="w-full rounded-md border border-[#333333] px-3 py-2 text-xs font-semibold transition hover:bg-[#292929] sm:w-auto">
+                        ↻ Réinitialiser
+                    </button>
+                </div>
+
+            </div>
+
+
+            <!-- Results Counter -->
+            <p class="my-2 text-xs text-gray-400">
+                6 séries affichées
+            </p>
+
+
+            <!-- Series Cards -->
+            <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+
+
+                <!-- Breaking Bad -->
+                <article class="overflow-hidden rounded-xl border border-[#333333] bg-[#191919]">
+
+                    <img src="https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=600" alt="Breaking Bad"
+                        class="h-36 w-full object-cover sm:h-36">
+
+                    <div class="p-2">
+                        <h4 class="text-xs font-bold">Breaking Bad</h4>
+
+                        <div class="my-1 flex flex-wrap gap-1">
+                            <span class="rounded-full bg-[#303030] px-2 py-0.5 text-[10px] text-gray-300">
+                                Drame
+                            </span>
+
+                            <span class="rounded-full bg-[#303030] px-2 py-0.5 text-[10px] text-gray-300">
+                                Policier
+                            </span>
+                        </div>
+
+                        <p class="text-[10px] text-gray-400">
+                            Un professeur de chimie mène une double vie.
+                        </p>
+                    </div>
+
+                </article>
+
+
+                <!-- Stranger Things -->
+                <article class="overflow-hidden rounded-xl border border-[#333333] bg-[#191919]">
+
+                    <img src="https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=600" alt="Stranger Things"
+                        class="h-36 w-full object-cover sm:h-36">
+
+                    <div class="p-2">
+                        <h4 class="text-xs font-bold">Stranger Things</h4>
+
+                        <div class="my-1 flex flex-wrap gap-1">
+                            <span class="rounded-full bg-[#303030] px-2 py-0.5 text-[10px] text-gray-300">
+                                Fantastique
+                            </span>
+
+                            <span class="rounded-full bg-[#303030] px-2 py-0.5 text-[10px] text-gray-300">
+                                Science-fiction
+                            </span>
+                        </div>
+
+                        <p class="text-[10px] text-gray-400">
+                            Une disparition bouleverse une petite ville.
+                        </p>
+                    </div>
+
+                </article>
+
+
+                <!-- The Bear -->
+                <article class="overflow-hidden rounded-xl border border-[#333333] bg-[#191919]">
+
+                    <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600" alt="The Bear"
+                        class="h-36 w-full object-cover sm:h-36">
+
+                    <div class="p-2">
+                        <h4 class="text-xs font-bold">The Bear</h4>
+
+                        <div class="my-1 flex flex-wrap gap-1">
+                            <span class="rounded-full bg-[#303030] px-2 py-0.5 text-[10px] text-gray-300">
+                                Drame
+                            </span>
+
+                            <span class="rounded-full bg-[#303030] px-2 py-0.5 text-[10px] text-gray-300">
+                                Comédie
+                            </span>
+                        </div>
+
+                        <p class="text-[10px] text-gray-400">
+                            Un jeune chef reprend le restaurant familial.
+                        </p>
+                    </div>
+
+                </article>
+
+
+                <!-- Dark -->
+                <article class="overflow-hidden rounded-xl border border-[#333333] bg-[#191919]">
+
+                    <img src="https://images.unsplash.com/photo-1511497584788-876760111969?w=600" alt="Dark"
+                        class="h-36 w-full object-cover sm:h-36">
+
+                    <div class="p-2">
+                        <h4 class="text-xs font-bold">Dark</h4>
+
+                        <div class="my-1 flex flex-wrap gap-1">
+                            <span class="rounded-full bg-[#303030] px-2 py-0.5 text-[10px] text-gray-300">
+                                Science-fiction
+                            </span>
+
+                            <span class="rounded-full bg-[#303030] px-2 py-0.5 text-[10px] text-gray-300">
+                                Mystère
+                            </span>
+                        </div>
+
+                        <p class="text-[10px] text-gray-400">
+                            Des disparitions révèlent les secrets d'une ville.
+                        </p>
+                    </div>
+
+                </article>
+
+
+                <!-- Brooklyn Nine-Nine -->
+                <article class="overflow-hidden rounded-xl border border-[#333333] bg-[#191919]">
+
+                    <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=600"
+                        alt="Brooklyn Nine-Nine" class="h-36 w-full object-cover sm:h-36">
+
+                    <div class="p-2">
+                        <h4 class="text-xs font-bold">Brooklyn Nine-Nine</h4>
+
+                        <div class="my-1 flex flex-wrap gap-1">
+                            <span class="rounded-full bg-[#303030] px-2 py-0.5 text-[10px] text-gray-300">
+                                Comédie
+                            </span>
+
+                            <span class="rounded-full bg-[#303030] px-2 py-0.5 text-[10px] text-gray-300">
+                                Policier
+                            </span>
+                        </div>
+
+                        <p class="text-[10px] text-gray-400">
+                            Le quotidien d'une équipe de policiers à Brooklyn.
+                        </p>
+                    </div>
+
+                </article>
+
+
+                <!-- Sherlock -->
+                <article class="overflow-hidden rounded-xl border border-[#333333] bg-[#191919]">
+
+                    <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600" alt="Sherlock"
+                        class="h-36 w-full object-cover sm:h-36">
+
+                    <div class="p-2">
+                        <h4 class="text-xs font-bold">Sherlock</h4>
+
+                        <div class="my-1 flex flex-wrap gap-1">
+                            <span class="rounded-full bg-[#303030] px-2 py-0.5 text-[10px] text-gray-300">
+                                Policier
+                            </span>
+
+                            <span class="rounded-full bg-[#303030] px-2 py-0.5 text-[10px] text-gray-300">
+                                Mystère
+                            </span>
+                        </div>
+
+                        <p class="text-[10px] text-gray-400">
+                            Un détective et son ami enquêtent à Londres.
+                        </p>
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
+
+<script>
+    let response = fetch("https://api.tvmaze.com/shows?page=0");
+    console.log(response.ok)
+    response.then(result => {
+        console.log(result.json());
+        console.log(result.ok);
+    })
+</script>
