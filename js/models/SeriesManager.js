@@ -1,4 +1,4 @@
-import { Series } from "./Series";
+import { Series } from "./Series.js";
 export class SeriesManager {
 
     constructor() {
@@ -31,5 +31,22 @@ export class SeriesManager {
                 return new Series(serie);
             })
         }
+
+        return this.series;
+    }
+
+    AjouterSerie(objet){
+        const serie = new Series(objet);
+        this.series.unshift(serie);
+        localStorage.setItem("Series" , JSON.stringify(this.series));
+    }
+
+    Recherche(array, input){
+        return array.filter((arr) => arr.name.toLowerCase().startsWith(input.toLowerCase()))
+    }
+
+    Filtrer(array, option){
+        if(option) return array.filter(arr => arr.genres.includes(option));
+        return array
     }
 }
