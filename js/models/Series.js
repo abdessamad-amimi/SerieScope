@@ -5,7 +5,12 @@ export class Series{
         this.language = object.language || null;
         this.status = object.status || null;
         this.genres = object.genres;
-        this.summary = object.summary || null;
-        this.image = object.image || "./assets/images/comming_soon";
+        this.summary = object.summary || object.name;
+        this.url = object.url;
+        this.image = 
+        {
+            medium: object.image.medium || "./assets/images/comming_soon",
+            original: object.image.original || "./assets/images/comming_soon"
+        };
     }
 }

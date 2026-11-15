@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de la série – Sériescope</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="js/Details.js" type="module"></script>
+</head>
+
+<body class="flex h-screen flex-col overflow-hidden bg-[#111111] text-white">
+
+    <!-- Navbar -->
+    <header class="shrink-0 bg-[#090909] px-4 py-3">
+        <nav class="mx-auto flex max-w-7xl items-center gap-2">
+            <div class="flex h-7 w-7 items-center justify-center rounded-md bg-white text-black">
+                <span class="text-sm">▣</span>
+            </div>
+
+            <h1 class="text-sm font-bold">Sériescope</h1>
+
+            <a href="index.html"
+                class="ml-auto rounded-md border border-[#333333] px-3 py-2 text-xs font-semibold transition hover:bg-[#292929]">
+                ← Retour au catalogue
+            </a>
+        </nav>
+    </header>
+
+
+    <main class="mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col gap-5 px-4 py-5">
+
+        <!-- Series details -->
+        <article
+            class="grid min-h-0 flex-1 grid-cols-1 gap-6 overflow-y-auto rounded-xl border border-[#333333] bg-[#191919] p-5 sm:p-8 md:grid-cols-[340px_1fr] md:gap-10 md:grid-rows-[minmax(0,1fr)] md:overflow-hidden">
+
+            <!-- Image -->
+            <img id="serie-image" src="https://placehold.co/420x600/191919/666666?text=Pas+de+photo"
+                alt="Affiche de la série"
+                class="w-full max-w-xs rounded-lg border border-[#333333] bg-[#111111] object-cover md:h-full md:max-w-none">
+
+            <!-- Info -->
+            <div class="space-y-6 md:min-h-0 md:overflow-y-auto md:pr-2">
+
+                <h2 id="serie-nom" class="text-3xl font-bold sm:text-5xl">Nom de la série</h2>
+
+                <div>
+                    <h3 class="mb-2 text-lg font-bold">Genres</h3>
+
+                    <!-- Un badge par genre : il peut y en avoir plusieurs -->
+                    <div id="serie-genres" class="flex flex-wrap gap-2">
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="mb-2 text-lg font-bold">Description</h3>
+                    <div id="serie-description" class="max-w-3xl space-y-3 text-base leading-7 text-gray-300">
+                    </div>
+                </div>
+
+                <a id="serie-lien" href="" target="_blank" rel="noopener noreferrer"
+                    class="inline-block rounded-md bg-white px-6 py-3 text-sm font-semibold text-black transition hover:bg-gray-300">
+                    Voir le site officiel
+                </a>
+
+            </div>
+        </article>
+
+    </main>
+
+</body>
+
+</html>

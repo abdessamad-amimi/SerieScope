@@ -3,6 +3,27 @@ import { SeriesManager } from "../models/SeriesManager.js";
 const manager = new SeriesManager();
 const result = await manager.GetShows();
 
+const reader = new FileReader();
+
+const serieObject = {
+    id: null,
+    name: null,
+    language: null,
+    status: null,
+    genres: [],
+    summary: null,
+    image: {medium: null, original: null}
+};
+
+let nextId = null;
+
+const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+
+if(!localStorage.getItem("nextId")){
+    nextId = 241;
+    localStorage.setItem("nextId" , JSON.stringify(nextId));
+}
+
 const SeriesCard = document.querySelector("#SeriesCard");
 const filterSelect = document.querySelector("#filter");
 const inputRecherche = document.querySelector("#search");
@@ -19,8 +40,16 @@ const formSubmit = document.querySelector("#formSubmit");
 const retirerImage = document.querySelector("#retirer-image");
 
 imageInput.addEventListener("input", () => {
-    const fileList = imageInput.fil;
-    console.log(fileList);
+    try {
+        reader.onload = () => {
+            const fileContent = reader.result;
+            serieObject.image.medium = fileContent;
+            serieObject.image.original = fileContent;
+        }
+        reader.readAsDataURL(imageInput.files[0]);
+    } catch (error) {
+        console.error(error);
+    }
 });
 
 const erreurName = document.querySelector("#erreur-name");
@@ -33,9 +62,13 @@ const selectedGenres = document.querySelector("#genres-selectionnes");
 
 const counterP = document.querySelector("#counter");
 
-counterP.textContent = `${manager.series.length} séries affichées`;
+function UpdateCounter() {
+    counterP.textContent = `${manager.series.length} séries affichées`;
+}
 
-const genresDisponibles = await GetGenres();
+UpdateCounter()
+
+const genresDisponibles = GetGenres();
 const genresChoisis = [];
 
 function AfficherGenres() {
@@ -100,7 +133,7 @@ function AfficherSuggetions(recherche) {
 }
 
 genreInput.addEventListener("input", () => {
-    if (genresChoisis.length < 3) {
+    if (genresChoisis.length < 4) {
         AfficherSuggetions(genreInput.value);
     } else {
         suggestionsGenres.classList.add("hidden");
@@ -176,10 +209,31 @@ imageInput.addEventListener("input", () => {
     ValidImage();
 })
 
-function AjouterSerie() {
+async function AjouterSerie() {
     let valid = true;
 
+    let nextId = JSON.parse(localStorage.getItem("nextId"));
+    
+    serieObject.id = nextId;
+    serieObject.name = nameInput.value;
+    serieObject.genres.push(...genresChoisis);
+    serieObject.summary = descriptionInput.value;
 
+    manager.AjouterSerie(serieObject);
+
+    nextId ++;
+    localStorage.setItem("nextId" , JSON.stringify(nextId));
+
+    ShowSeries(await manager.GetShows());
+}
+
+function ClearInputs(){
+    nameInput.value = "";
+    descriptionInput.value = "";
+    genreInput.value = "";
+    genresChoisis.length = 0;
+    AfficherGenres();
+    imageInput.value = "";
 }
 
 formSubmit.addEventListener("submit", (e) => {
@@ -189,7 +243,10 @@ formSubmit.addEventListener("submit", (e) => {
     if (!ValiderDescription()) valid = false;
     if (!ValidImage()) valid = false;
     if (!ValidGenre()) valid = false;
-    if (valid) console.log("Success");
+    if (valid) {
+        AjouterSerie();
+        ClearInputs();
+    }
     else console.log("Error");
 });
 
@@ -203,7 +260,7 @@ function GetGenres() {
     return AllGenres;
 }
 
-async function AppendGenres() {
+function AppendGenres() {
     filterSelect.replaceChildren();
 
     const TousOption = document.createElement("option");
@@ -220,7 +277,7 @@ async function AppendGenres() {
     })
 }
 
-async function ShowSeries(data) {
+function ShowSeries(data) {
     SeriesCard.replaceChildren();
 
     data.forEach(data => {
@@ -229,12 +286,12 @@ async function ShowSeries(data) {
             "group overflow-hidden rounded-xl border border-[#333333] bg-[#191919] transition duration-300 hover:-translate-y-1 hover:border-gray-500 hover:bg-[#1f1f1f] hover:shadow-lg hover:shadow-black/50 active:scale-[0.98] active:border-gray-500 active:bg-[#1f1f1f]";
 
         const img = document.createElement("img");
-        if (data.image !== null && data.image.medium !== null) {
-            img.src = data.image.medium;
+        if (data.image !== null && data.image.original !== null) {
+            img.src = data.image.original;
         }
         else img.src = "assets/images/coming_soon.jpg";
         img.alt = data.name;
-        img.className = "h-36 w-full object-cover sm:h-36";
+        img.className = "h-80 w-full";
 
         const contenu = document.createElement("div");
         contenu.className = "p-2";
@@ -281,8 +338,8 @@ async function ShowSeries(data) {
 ShowSeries(result);
 AppendGenres();
 
-async function ApplyChanges() {
-    let allSeries = await manager.GetShows();
+function ApplyChanges() {
+    let allSeries = result;
 
     console.log("Before filtering:", allSeries.length);
     console.log("Select value:", filterSelect.value);
@@ -298,8 +355,8 @@ async function ApplyChanges() {
     ShowSeries(allSeries);
 }
 
-async function ResetSearch() {
-    let allSeries = await manager.GetShows();
+function ResetSearch() {
+    let allSeries = result;
 
     inputRecherche.value = "";
     filterSelect.value = "tous";
@@ -308,11 +365,11 @@ async function ResetSearch() {
 }
 
 inputRecherche.addEventListener("input", async () => {
-    await ApplyChanges();
+    ApplyChanges();
 });
 
 filterSelect.addEventListener("change", async () => {
-    await ApplyChanges();
+    ApplyChanges();
     console.log("Selected value:", filterSelect.value);
 })
 

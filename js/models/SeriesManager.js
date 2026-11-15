@@ -14,7 +14,7 @@ export class SeriesManager {
                 }
                 else {
                     const shows = await response.json();
-                    this.series = shows.slice(0, 20).map((show) => {
+                    this.series = shows.map((show) => {
                         return new Series(show)
                     })
 
