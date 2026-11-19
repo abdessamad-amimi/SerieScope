@@ -156,6 +156,7 @@ export async function SupprimerSerie(SeriesCard, store, manager, counterP){
     console.log(series);
 
     console.log(store.series)
+    
 
     ShowSeries(store.series, SeriesCard, store.critere.recherche, store.critere.filter, store.critere.langue, counterP, store.series);
 }
