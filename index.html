@@ -7,7 +7,8 @@
     <title>Sériescope</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="js/view/SeriesView.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/view/main.js" type="module"></script>
 </head>
 
 <body class="min-h-screen bg-[#111111] text-white">
@@ -77,15 +78,34 @@
                                 class="block w-full bg-transparent p-0 m-0 text-xs leading-5 outline-none">
                         </div>
 
-                        <div id="genres-selectionnes" class="flex flex-col w-4 flex-wrap gap-2 mb-2 mt-2"></div>
+                        <div id="genres-selectionnes" class="flex flex-row flex-wrap gap-2 mb-2 mt-2"></div>
 
                         <div id="suggestions-genres"
-                            class="w-max mt-1 hidden max-h-40 overflow-y-auto rounded-md flex flex-col border border-[#383838] bg-[#202020]">
+                            class="w-max mt-1 hidden rounded-md flex flex-col gap-1.5 border border-[#383838] bg-[#202020]">
                         </div>
 
                         <p id="erreur-genre" role="alert" class="mt-1 text-xs text-red-400"></p>
                     </div>
 
+                </div>
+
+                <div>
+                    <label for="language" class="mb-1 block text-xs font-medium">
+                        Langue *
+                    </label>
+
+                    <select id="language" aria-describedby="erreur-language"
+                        class="w-full rounded-md border border-[#333333] bg-[#111111] px-2 py-2 text-xs text-gray-300 outline-none transition focus:border-gray-500">
+                        <option value="">Choisir une langue</option>
+                        <option value="English">English</option>
+                        <option value="French">French</option>
+                        <option value="Spanish">Spanish</option>
+                        <option value="German">German</option>
+                        <option value="Japanese">Japanese</option>
+                        <option value="Korean">Korean</option>
+                    </select>
+
+                    <p id="erreur-language" role="alert" class="mt-1 text-xs text-red-400"></p>
                 </div>
 
 
@@ -148,7 +168,7 @@
 
             <!-- Search and Filter -->
             <div
-                class="grid grid-cols-1 gap-2 rounded-xl border border-[#333333] bg-[#191919] p-2 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_auto]">
+                class="grid grid-cols-1 gap-2 rounded-xl border border-[#333333] bg-[#191919] p-2 sm:grid-cols-3 lg:grid-cols-[1fr_1fr_1fr]">
 
                 <div>
                     <label for="search" class="mb-1 block text-xs">
@@ -175,6 +195,19 @@
                     <p id="erreur-filter" role="alert" class="mt-1 hidden text-xs text-red-400"></p>
                 </div>
 
+                <div>
+                    <label for="langue" class="mb-1 block text-xs">
+                        Langue
+                    </label>
+
+                    <select id="langue" aria-describedby="erreur-langue"
+                        class="w-full rounded-md border border-[#333333] bg-[#111111] px-2 py-2 text-xs text-gray-300 outline-none focus:border-gray-500">
+
+                    </select>
+
+                    <p id="erreur-langue" role="alert" class="mt-1 hidden text-xs text-red-400"></p>
+                </div>
+
 
                 <div class="flex items-end">
                     <button type="reset" id="reset"
@@ -188,7 +221,7 @@
 
             <!-- Results Counter -->
             <p id="counter" class="my-2 text-xs text-gray-400">
-                
+
             </p>
 
 
@@ -225,4 +258,5 @@
     // }
 
     // test()
+
 </script>

@@ -1,12 +1,10 @@
-import { SeriesManager } from "./models/SeriesManager.js";
+import { SeriesManager } from "../models/SeriesManager.js";
 const manager = new SeriesManager();
-
 const params = new URLSearchParams(window.location.search);
 const id = Number(params.get("id"));
 console.log(window.location.search)
 
-const Allseries = await manager.GetShows();
-const serie = Allseries.find(serie => serie.id === id);
+const serie = await manager.getById(id);
 
 const serieImage = document.querySelector("#serie-image");
 const serieNom = document.querySelector("#serie-nom");
