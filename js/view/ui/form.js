@@ -147,18 +147,14 @@ export async function SupprimerSerie(SeriesCard, store, manager, counterP){
     const deletedSerie = store.series.find(serie => serie.id === store.idSupprimer);
     const index = store.series.indexOf(deletedSerie);
 
-    console.log(deletedSerie + " " + index);
-
     await manager.remove(store.idSupprimer);
     store.series.splice(index, 1);
 
-    const series = await manager.getAll();
-    console.log(series);
+    store.idSupprimer = null;
 
-    console.log(store.series)
-    
+    ShowSeries(store, SeriesCard, counterP);
 
-    ShowSeries(store.series, SeriesCard, store.critere.recherche, store.critere.filter, store.critere.langue, counterP, store.series);
+    console.log(store.idSupprimer);
 }
 
 export function ClearInputs(nameInput, descriptionInput, genreInput, genresChoisis, selectedGenres, imageInput) {

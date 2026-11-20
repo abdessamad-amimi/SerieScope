@@ -2,7 +2,7 @@ import { Series } from "../models/Series.js";
 import { SeriesManager } from "../models/SeriesManager.js";
 import { setLocalStorage } from "./data/store.js";
 import { ShowSeries } from "./ui/cards.js";
-import { AppendGenres, AppendLangue, GetGenres } from "./ui/filters.js"
+import { AppendGenres, AppendLangue, Filter, GetGenres } from "./ui/filters.js"
 import {
     AfficherSuggetions,
     AfficherGenres,
@@ -64,7 +64,7 @@ const selectedGenres = document.querySelector("#genres-selectionnes");
 
 const counterP = document.querySelector("#counter");
 
-ShowSeries(store.series, SeriesCard, store.critere.recherche, store.critere.filter, store.critere.langue, counterP, store.series);
+ShowSeries(store, SeriesCard, counterP)
 
 const genresDisponibles = GetGenres(store.series);
 const genresChoisis = [];
@@ -136,15 +136,15 @@ formSubmit.addEventListener("submit", (e) => {
 function ResetSearch() {
 
     inputRecherche.value = "";
-    filterLangue.value = "tous";
-    filterSelect.value = "tous";
+    filterLangue.value = "";
+    filterSelect.value = "";
     fillCritere();
-    ShowSeries(store.series, SeriesCard, store.critere.recherche, store.critere.filter, store.critere.langue, counterP, store.series);
 
 }
 
 function fillCritere() {
     store.critere = JSON.parse(localStorage.getItem("critere"));
+
     store.critere.filter = filterSelect.value;
     store.critere.recherche = inputRecherche.value.toLowerCase();
     store.critere.langue = filterLangue.value;
@@ -154,19 +154,33 @@ function fillCritere() {
 
 inputRecherche.addEventListener("input", async () => {
     fillCritere();
-    ShowSeries(store.series, SeriesCard, store.critere.recherche, store.critere.filter, store.critere.langue, counterP, store.series);
+    await Filter(store);
+    ShowSeries(store, SeriesCard, counterP)
 });
 
 filterSelect.addEventListener("change", async () => {
     fillCritere();
-    ShowSeries(store.series, SeriesCard, store.critere.recherche, store.critere.filter, store.critere.langue, counterP, store.series);
+    await Filter(store);
+    ShowSeries(store, SeriesCard, counterP)
 });
 
-filterLangue.addEventListener("change", () => {
+filterLangue.addEventListener("change", async () => {
     fillCritere();
-    ShowSeries(store.series, SeriesCard, store.critere.recherche, store.critere.filter, store.critere.langue, counterP, store.series);
+    await Filter(store);
+    ShowSeries(store, SeriesCard, counterP)
 })
 
-reset.addEventListener("click", () => {
+reset.addEventListener("click", async () => {
     ResetSearch();
+    await Filter(store);
+    ShowSeries(store, SeriesCard, counterP);
 });
+
+export async function FillInputs(){
+    const serieModifier = await manager.getById("/1");
+    nameInput.value = serieModifier.name;
+    languageInput.value = serieModifier.language;
+    descriptionInput = serieModifier.summary;
+    genresChoisis.push(...serieModifier.genres);
+    AfficherGenres(selectedGenres, genresChoisis, genreInput)
+}

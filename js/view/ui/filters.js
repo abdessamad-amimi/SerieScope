@@ -1,23 +1,27 @@
-export function Recherche(array, input) {
-    if(input === "") return array
-    return array.filter((arr) => arr.name.toLowerCase().startsWith(input));
+import { SeriesManager } from "../../models/SeriesManager.js";
+import { setLocalStorage } from "../data/store.js";
+
+const manager = new SeriesManager();
+
+async function getParams(){
+    const store = await setLocalStorage();
+    const name = store.critere.recherche;
+    const genre = store.critere.filter;
+    const langue = store.critere.langue;
+    return {name: name, genre: genre, language: langue}
 }
 
-export function GenreFilter(array, option) {
-    if (option === "tous" || option === "") return array;
-    else return array.filter(arr => arr.genres.includes(option));
-}
-
-export function LangueFilter(array, option) {
-    if (option === "tous" || option === "") return array;
-    else return array.filter(arr => arr.language === option);
+export async function Filter(store){
+    const params = await getParams();
+    store.series = await manager.getAll(params);
+    return store.series;
 }
 
 export function GetGenres(AllSeries) {
     const AllGenres = [];
     AllSeries.forEach(serie => serie.genres.forEach(genre => {
         if (!AllGenres.includes(genre)) AllGenres.push(genre);
-    }))
+    }));
     return AllGenres;
 }
 
@@ -26,7 +30,7 @@ export function AppendGenres(filterSelect, AllSeries, value) {
 
     const TousOption = document.createElement("option");
     TousOption.textContent = "Afficher tous";
-    TousOption.value = "tous";
+    TousOption.value = "";
     filterSelect.append(TousOption);
 
     const AllGenre = GetGenres(AllSeries);
@@ -52,7 +56,7 @@ export function AppendLangue(filterSelect, AllSeries, value) {
 
     const TousOption = document.createElement("option");
     TousOption.textContent = "Afficher tous";
-    TousOption.value = "tous";
+    TousOption.value = "";
     filterSelect.append(TousOption);
 
     const AllLangue = GetLangue(AllSeries);

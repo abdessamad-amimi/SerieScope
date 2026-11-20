@@ -7,13 +7,24 @@ export class SeriesManager {
         this.series = [];
     }
 
-    async getAll() {
+    async getAll(params) {
         try {
-            const response = await myApi.get("");
-            const shows = response.data;
-            this.series = shows.map((show) => {
-                return new Series(show);
-            })
+            if (params) {
+                const response = await myApi.get("" , {
+                    params: params
+                });
+                const shows = response.data;
+                this.series = shows.map((show) => {
+                    return new Series(show);
+                });
+            }
+            else {
+                const response = await myApi.get("");
+                const shows = response.data;
+                this.series = shows.map((show) => {
+                    return new Series(show);
+                });
+            }
         }
         catch (error) {
             console.error(error);
@@ -29,16 +40,16 @@ export class SeriesManager {
 
     async create(newSerie) {
         const serie = new Series(newSerie);
-        const createSerie = await myApi.post("" , serie);
+        const createSerie = await myApi.post("", serie);
         return createSerie.data;
     }
 
-    async update(id , newSerie){
-        const updatedSerie = await myApi.put(`/${id}` , newSerie);
+    async update(id, newSerie) {
+        const updatedSerie = await myApi.put(`/${id}`, newSerie);
         return new Series(updatedSerie.data);
     }
 
-    async remove(id){
+    async remove(id) {
         await myApi.delete(`/${id}`);
     }
 

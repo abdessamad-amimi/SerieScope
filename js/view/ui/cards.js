@@ -1,19 +1,15 @@
 import { SeriesManager } from "../../models/SeriesManager.js";
 import { setLocalStorage } from "../data/store.js";
-import { GenreFilter, LangueFilter, Recherche } from "./filters.js";
+import { FillInputs } from "../main.js";
 import { SupprimerSerie } from "./form.js";
 
-const store = await setLocalStorage();
 const manager = new SeriesManager();
 
-export function ShowSeries(data, SeriesCard, recherche, select, langue, counterP) {
+export function ShowSeries(store, SeriesCard, counterP) {
     SeriesCard.replaceChildren();
-    data = Recherche(data, recherche);
-    data = GenreFilter(data, select);
-    data = LangueFilter(data, langue);
-    UpdateCounter(counterP, data);
-    if (data.length === 0) return;
-    data.forEach(data => {
+    UpdateCounter(counterP, store.series);
+    if (store.series.length === 0) return;
+    store.series.forEach(data => {
         const article = document.createElement("article");
         article.className =
             "group overflow-hidden rounded-xl border border-[#333333] bg-[#191919] transition duration-300 hover:-translate-y-1 hover:border-gray-500 hover:bg-[#1f1f1f] hover:shadow-lg hover:shadow-black/50 active:scale-[0.98] active:border-gray-500 active:bg-[#1f1f1f]";
@@ -69,6 +65,7 @@ export function ShowSeries(data, SeriesCard, recherche, select, langue, counterP
             "flex-1 rounded-lg border border-[#333333] bg-blue-400/40  px-2 py-1.5 text-[10px] font-semibold text-gray-300 transition hover:border-gray-500 hover:bg-[#3a3a3a] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
         btnModifier.addEventListener("click", () => {
             store.idModified = data.id;
+            FillInputs();
         });
 
         const btnSupprimer = document.createElement("button");
@@ -86,7 +83,7 @@ export function ShowSeries(data, SeriesCard, recherche, select, langue, counterP
             else {
                 console.log(store.idSupprimer);
                 if (confirm("Sur de supprimer ?")) {
-                    SupprimerSerie(SeriesCard, store, manager, counterP);
+                    SupprimerSerie(SeriesCard, store, manager, counterP)
                 }
             }
         });
@@ -99,6 +96,6 @@ export function ShowSeries(data, SeriesCard, recherche, select, langue, counterP
     });
 }
 
-function UpdateCounter(counterP, series) {
+async function UpdateCounter(counterP, series) {
     counterP.textContent = `${series.length} séries affichées`;
 }
