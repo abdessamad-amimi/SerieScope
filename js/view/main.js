@@ -12,7 +12,7 @@ import {
     ValiderDescription,
     AjouterSerie,
     ClearInputs,
-    SupprimerSerie
+    ModifierSerie
 } from "./ui/form.js";
 
 const manager = new SeriesManager();
@@ -30,6 +30,8 @@ const serieObject = {
         original: "https://raw.githubusercontent.com/abdessamad-amimi/SerieScope/main/assets/images/coming_soon.jpg?utm_source=chatgpt.com"
     }
 };
+
+const btnSubmit = document.querySelector("#btnSubmit");
 
 const SeriesCard = document.querySelector("#SeriesCard");
 const filterSelect = document.querySelector("#filter");
@@ -114,7 +116,7 @@ languageInput.addEventListener("click", () => {
     Validlanguage(languageInput, erreurLanguage);
 })
 
-formSubmit.addEventListener("submit", (e) => {
+formSubmit.addEventListener("submit", async (e) => {
     e.preventDefault();
     let valid = true;
     if (!ValiderName(nameInput, erreurName)) valid = false;
@@ -122,12 +124,15 @@ formSubmit.addEventListener("submit", (e) => {
     if (!ValidGenre(genresChoisis, erreurGenre)) valid = false;
     if (!Validlanguage(languageInput, erreurLanguage)) valid = false;
     if (valid) {
-        if (store.idModified !== null) {
-            AjouterSerie(SeriesCard, serieObject, nameInput, genresChoisis, descriptionInput, languageInput, store, manager, counterP);
+        if (store.idModified === null) {
+            await AjouterSerie(SeriesCard, serieObject, nameInput, genresChoisis, descriptionInput, languageInput, store, manager, counterP);
             ClearInputs(nameInput, descriptionInput, genreInput, genresChoisis, selectedGenres, imageInput);
         }
         else{
-            
+            ModifierSerie(store.idModified, SeriesCard, serieObject, nameInput, genresChoisis, descriptionInput, languageInput, store, manager, counterP);
+            ClearInputs(nameInput, descriptionInput, genreInput, genresChoisis, selectedGenres, imageInput);
+            store.idModified = null;
+            btnSubmit.textContent = "+ Ajouter la série";
         }
     }
     else console.log("Error");
@@ -176,11 +181,14 @@ reset.addEventListener("click", async () => {
     ShowSeries(store, SeriesCard, counterP);
 });
 
-export async function FillInputs(){
-    const serieModifier = await manager.getById("/1");
+export async function FillInputs(id){
+    ClearInputs(nameInput, descriptionInput, genreInput, genresChoisis, selectedGenres, imageInput);
+    store.idModified = id;
+    btnSubmit.textContent = "Modifier la série";
+    const serieModifier = await manager.getById(id);
     nameInput.value = serieModifier.name;
     languageInput.value = serieModifier.language;
-    descriptionInput = serieModifier.summary;
+    descriptionInput.value = serieModifier.summary;
     genresChoisis.push(...serieModifier.genres);
-    AfficherGenres(selectedGenres, genresChoisis, genreInput)
+    AfficherGenres(selectedGenres, genresChoisis, genreInput);
 }

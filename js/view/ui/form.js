@@ -112,20 +112,23 @@ export function ValiderDescription(descriptionInput, erreurDescription) {
     return valid;
 }
 
-export function AjouterSerie(SeriesCard, serieObject, nameInput, genresChoisis, descriptionInput, languageInput, store, manager, counterP) {
+export async function AjouterSerie(SeriesCard, serieObject, nameInput, genresChoisis, descriptionInput, languageInput, store, manager, counterP) {
 
     serieObject.name = nameInput.value;
     serieObject.genres.push(...genresChoisis);
     serieObject.summary = descriptionInput.value;
     serieObject.language = languageInput.value;
 
-    manager.create(serieObject);
+    const newSerie = await manager.create(serieObject);
+
+    serieObject.id = newSerie.id;
+    console.log(newSerie)
     store.series.push(serieObject);
 
-    ShowSeries(store.series, SeriesCard, store.critere.recherche, store.critere.filter, store.critere.langue, counterP, store.series);
+    ShowSeries(store, SeriesCard, counterP);
 }
 
-export function ModifierSerie(idModified, SeriesCard, serieObject, nameInput, genresChoisis, descriptionInput, languageInput, store, manager, counterP){
+export async function ModifierSerie(idModified, SeriesCard, serieObject, nameInput, genresChoisis, descriptionInput, languageInput, store, manager, counterP) {
     const oldSerie = store.series.find(serie => serie.id === idModified);
     const index = store.series.indexOf(oldSerie);
     serieObject.name = nameInput.value;
@@ -133,18 +136,25 @@ export function ModifierSerie(idModified, SeriesCard, serieObject, nameInput, ge
     serieObject.summary = descriptionInput.value;
     serieObject.language = languageInput.value;
 
-    manager.update(idModified, serieObject);
-    store.series[index].name = serieObject.name;
-    store.series[index].genres.push(...serieObject.genres);
-    store.series[index].summary = serieObject.summary;
-    store.series[index].language = serieObject.language;
+    if(oldSerie.image) serieObject.image = oldSerie.image;
+    if(oldSerie.premiered) serieObject.premiered = oldSerie.premiered;
+    if(oldSerie.ended) serieObject.ended = oldSerie.ended;
+    if(oldSerie.officialSite) serieObject.officialSite = oldSerie.officialSite;
+    if(oldSerie.rating) serieObject.rating = oldSerie.rating;
 
-    ShowSeries(store.series, SeriesCard, store.critere.recherche, store.critere.filter, store.critere.langue, counterP, store.series);
+    const updatedSerie = await manager.update(idModified, serieObject);
+    store.series[index] = updatedSerie;
+
+    console.log(await manager.getById(idModified));
+    console.log(store.series[index]);
+    
+    
+    ShowSeries(store, SeriesCard, counterP);
 
 }
 
-export async function SupprimerSerie(SeriesCard, store, manager, counterP){
-    const deletedSerie = store.series.find(serie => serie.id === store.idSupprimer);
+export async function SupprimerSerie(SeriesCard, store, manager, counterP) {
+    const deletedSerie = await manager.getById(store.idSupprimer);
     const index = store.series.indexOf(deletedSerie);
 
     await manager.remove(store.idSupprimer);
@@ -153,9 +163,8 @@ export async function SupprimerSerie(SeriesCard, store, manager, counterP){
     store.idSupprimer = null;
 
     ShowSeries(store, SeriesCard, counterP);
-
-    console.log(store.idSupprimer);
 }
+
 
 export function ClearInputs(nameInput, descriptionInput, genreInput, genresChoisis, selectedGenres, imageInput) {
     nameInput.value = "";

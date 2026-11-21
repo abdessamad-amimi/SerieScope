@@ -15,7 +15,7 @@ const serieGenres = document.querySelector("#serie-genres");
 serieImage.src = serie.image.original;
 serieNom.textContent = serie.name;
 serieDescription.innerHTML = serie.summary;
-if(serie.url) serieLien.href = serie.url;
+if(serie.officialSite) serieLien.href = serie.officialSite;
 
 serie.genres.forEach(genre => {
     serieGenres.innerHTML += `
