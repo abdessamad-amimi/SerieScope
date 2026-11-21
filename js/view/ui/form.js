@@ -115,7 +115,7 @@ export function ValiderDescription(descriptionInput, erreurDescription) {
 export async function AjouterSerie(SeriesCard, serieObject, nameInput, genresChoisis, descriptionInput, languageInput, store, manager, counterP) {
 
     serieObject.name = nameInput.value;
-    serieObject.genres.push(...genresChoisis);
+    serieObject.genres = genresChoisis;
     serieObject.summary = descriptionInput.value;
     serieObject.language = languageInput.value;
 
@@ -126,30 +126,54 @@ export async function AjouterSerie(SeriesCard, serieObject, nameInput, genresCho
     store.series.push(serieObject);
 
     ShowSeries(store, SeriesCard, counterP);
+
+    serieObject = {
+        name: null,
+        language: null,
+        status: null,
+        genres: [],
+        summary: null,
+        image: {
+            medium: "https://raw.githubusercontent.com/abdessamad-amimi/SerieScope/main/assets/images/coming_soon.jpg?utm_source=chatgpt.com",
+            original: "https://raw.githubusercontent.com/abdessamad-amimi/SerieScope/main/assets/images/coming_soon.jpg?utm_source=chatgpt.com"
+        }
+    };
 }
 
 export async function ModifierSerie(idModified, SeriesCard, serieObject, nameInput, genresChoisis, descriptionInput, languageInput, store, manager, counterP) {
     const oldSerie = store.series.find(serie => serie.id === idModified);
     const index = store.series.indexOf(oldSerie);
     serieObject.name = nameInput.value;
-    serieObject.genres.push(...genresChoisis);
+    serieObject.genres = genresChoisis;
     serieObject.summary = descriptionInput.value;
     serieObject.language = languageInput.value;
 
-    if(oldSerie.image) serieObject.image = oldSerie.image;
-    if(oldSerie.premiered) serieObject.premiered = oldSerie.premiered;
-    if(oldSerie.ended) serieObject.ended = oldSerie.ended;
-    if(oldSerie.officialSite) serieObject.officialSite = oldSerie.officialSite;
-    if(oldSerie.rating) serieObject.rating = oldSerie.rating;
+    if (oldSerie.image) serieObject.image = oldSerie.image;
+    if (oldSerie.premiered) serieObject.premiered = oldSerie.premiered;
+    if (oldSerie.ended) serieObject.ended = oldSerie.ended;
+    if (oldSerie.officialSite) serieObject.officialSite = oldSerie.officialSite;
+    if (oldSerie.rating) serieObject.rating = oldSerie.rating;
 
     const updatedSerie = await manager.update(idModified, serieObject);
     store.series[index] = updatedSerie;
 
     console.log(await manager.getById(idModified));
     console.log(store.series[index]);
-    
-    
+
+
     ShowSeries(store, SeriesCard, counterP);
+
+    serieObject = {
+        name: null,
+        language: null,
+        status: null,
+        genres: [],
+        summary: null,
+        image: {
+            medium: "https://raw.githubusercontent.com/abdessamad-amimi/SerieScope/main/assets/images/coming_soon.jpg?utm_source=chatgpt.com",
+            original: "https://raw.githubusercontent.com/abdessamad-amimi/SerieScope/main/assets/images/coming_soon.jpg?utm_source=chatgpt.com"
+        }
+    };
 
 }
 
@@ -166,11 +190,12 @@ export async function SupprimerSerie(SeriesCard, store, manager, counterP) {
 }
 
 
-export function ClearInputs(nameInput, descriptionInput, genreInput, genresChoisis, selectedGenres, imageInput) {
+export function ClearInputs(nameInput, descriptionInput, genreInput, genresChoisis, selectedGenres, imageInput, filterLangue) {
     nameInput.value = "";
     descriptionInput.value = "";
     genreInput.value = "";
     genresChoisis.length = 0;
     AfficherGenres(selectedGenres, genresChoisis, genreInput);
     imageInput.value = "";
+    filterLangue.value = "";
 }

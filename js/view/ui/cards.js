@@ -64,6 +64,10 @@ export function ShowSeries(store, SeriesCard, counterP) {
         btnModifier.className =
             "flex-1 rounded-lg border border-[#333333] bg-blue-400/40  px-2 py-1.5 text-[10px] font-semibold text-gray-300 transition hover:border-gray-500 hover:bg-[#3a3a3a] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
         btnModifier.addEventListener("click", () => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
             store.idModified = data.id;
             FillInputs(data.id);
         });

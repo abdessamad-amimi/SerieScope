@@ -126,11 +126,11 @@ formSubmit.addEventListener("submit", async (e) => {
     if (valid) {
         if (store.idModified === null) {
             await AjouterSerie(SeriesCard, serieObject, nameInput, genresChoisis, descriptionInput, languageInput, store, manager, counterP);
-            ClearInputs(nameInput, descriptionInput, genreInput, genresChoisis, selectedGenres, imageInput);
+            ClearInputs(nameInput, descriptionInput, genreInput, genresChoisis, selectedGenres, imageInput, filterLangue);
         }
         else{
-            ModifierSerie(store.idModified, SeriesCard, serieObject, nameInput, genresChoisis, descriptionInput, languageInput, store, manager, counterP);
-            ClearInputs(nameInput, descriptionInput, genreInput, genresChoisis, selectedGenres, imageInput);
+            await ModifierSerie(store.idModified, SeriesCard, serieObject, nameInput, genresChoisis, descriptionInput, languageInput, store, manager, counterP);
+            ClearInputs(nameInput, descriptionInput, genreInput, genresChoisis, selectedGenres, imageInput, filterLangue);
             store.idModified = null;
             btnSubmit.textContent = "+ Ajouter la série";
         }
@@ -182,7 +182,7 @@ reset.addEventListener("click", async () => {
 });
 
 export async function FillInputs(id){
-    ClearInputs(nameInput, descriptionInput, genreInput, genresChoisis, selectedGenres, imageInput);
+    ClearInputs(nameInput, descriptionInput, genreInput, genresChoisis, selectedGenres, imageInput, filterLangue);
     store.idModified = id;
     btnSubmit.textContent = "Modifier la série";
     const serieModifier = await manager.getById(id);
