@@ -179,7 +179,7 @@ export async function ModifierSerie(idModified, SeriesCard, serieObject, nameInp
 
 export async function SupprimerSerie(SeriesCard, store, manager, counterP) {
     const deletedSerie = await manager.getById(store.idSupprimer);
-    const index = store.series.indexOf(deletedSerie);
+    const index = store.series.findIndex(serie => serie.id === deletedSerie.id);
 
     await manager.remove(store.idSupprimer);
     store.series.splice(index, 1);

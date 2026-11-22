@@ -1,6 +1,6 @@
 import { SeriesManager } from "../../models/SeriesManager.js";
 import { setLocalStorage } from "../data/store.js";
-import { FillInputs } from "../main.js";
+import { FillInputs, RemoveHidden } from "../main.js";
 import { SupprimerSerie } from "./form.js";
 
 const manager = new SeriesManager();
@@ -85,10 +85,7 @@ export function ShowSeries(store, SeriesCard, counterP) {
                 alert("Vous pouvez pas supprimer la serie en modification !")
             }
             else {
-                console.log(store.idSupprimer);
-                if (confirm("Sur de supprimer ?")) {
-                    SupprimerSerie(SeriesCard, store, manager, counterP)
-                }
+                RemoveHidden(data.name);
             }
         });
 

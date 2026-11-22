@@ -12,7 +12,8 @@ import {
     ValiderDescription,
     AjouterSerie,
     ClearInputs,
-    ModifierSerie
+    ModifierSerie,
+    SupprimerSerie
 } from "./ui/form.js";
 
 const manager = new SeriesManager();
@@ -66,7 +67,30 @@ const selectedGenres = document.querySelector("#genres-selectionnes");
 
 const counterP = document.querySelector("#counter");
 
-ShowSeries(store, SeriesCard, counterP)
+const deleteModal = document.querySelector("#delete-modal");
+const deleteCancel = document.querySelector("#delete-cancel");
+const deleteConfirm = document.querySelector("#delete-confirm");
+const deleteSerieName = document.querySelector("#delete-serie-name");
+
+export function RemoveHidden(title){
+    deleteModal.classList.remove("hidden");
+    deleteSerieName.textContent = title
+}
+
+export function AddHidden(){
+    deleteModal.classList.add("hidden");
+}
+
+deleteCancel.addEventListener("click" , () => {
+    AddHidden();
+});
+
+deleteConfirm.addEventListener("click" , async () => {
+    await SupprimerSerie(SeriesCard, store, manager, counterP);
+    AddHidden();
+});
+
+ShowSeries(store, SeriesCard, counterP);
 
 const genresDisponibles = GetGenres(store.series);
 const genresChoisis = [];
